@@ -31,7 +31,15 @@ app.get('/', (req, res) => {
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
-
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(person => person.id === id)
+    if (person) {
+        res.json(person)
+    } else {
+        res.status(404).end()
+    }
+})
 app.get('/info', (req, res) => {
     const date = new Date()
     res.send('puhelinluettelossa ' + persons.length + ' henkilön tiedot <br><br>' + date)
