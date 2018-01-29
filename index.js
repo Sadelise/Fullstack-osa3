@@ -33,14 +33,14 @@ let persons = [
     }
 ]
 
-app.get('/', (req, res) => {
+app.get('/api/', (req, res) => {
     res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/persons', (req, res) => {
+app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
-app.post('/persons', (req, res) => {
+app.post('/api/persons', (req, res) => {
     const body = req.body
 
     if (persons.find(person => person.name === body.name)) {
@@ -61,7 +61,7 @@ app.post('/persons', (req, res) => {
     persons = persons.concat(person)
     res.json(person)
 })
-app.get('/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     const person = persons.find(person => person.id === id)
     if (person) {
@@ -70,13 +70,13 @@ app.get('/persons/:id', (req, res) => {
         res.status(404).end()
     }
 })
-app.delete('/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(person => person.id !== id)
 
     res.status(204).end()
 })
-app.get('/info', (req, res) => {
+app.get('/api/info', (req, res) => {
     const date = new Date()
     res.send('puhelinluettelossa ' + persons.length + ' henkilön tiedot <br><br>' + date)
 })
