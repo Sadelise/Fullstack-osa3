@@ -8,6 +8,8 @@ const cors = require('cors')
 app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan(':method :url :content :status :res[content-length] - :response-time ms'))
+app.use(express.static('build'))
+
 let persons = [
     {
         "name": "Arto Hellas",
