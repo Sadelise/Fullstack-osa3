@@ -52,6 +52,9 @@ app.get('/api/persons', (req, res) => {
         .then(persons => {
             res.json(persons.map(formatPerson))
         })
+        .catch(error => {
+            console.log(error)
+        })
 })
 
 app.post('/api/persons', (req, res) => {
@@ -63,6 +66,9 @@ app.post('/api/persons', (req, res) => {
             if (persons.find(person => person.name === body.name)) {
                 return res.status(400).json({ error: 'name must be unique' })
             }
+        })
+        .catch(error => {
+            console.log(error)
         })
     if (body.name === undefined) {
         return res.status(400).json({ error: 'name missing' })
@@ -79,6 +85,9 @@ app.post('/api/persons', (req, res) => {
             .then(newperson => {
                 res.json(formatPerson(newperson))
             })
+            .catch(error => {
+                console.log(error)
+            })
     }
 })
 
@@ -88,12 +97,18 @@ app.get('/api/persons/:id', (req, res) => {
         .then(person => {
             res.json(formatPerson(person))
         })
+        .catch(error => {
+            console.log(error)
+        })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
     Person
         .findByIdAndRemove(req.params.id)
         .then(res.status(204).end())
+        .catch(error => {
+            console.log(error)
+        })
 })
 
 app.get('/api/info', (req, res) => {
@@ -102,6 +117,9 @@ app.get('/api/info', (req, res) => {
         .find({})
         .then(persons => {
             res.send('puhelinluettelossa ' + persons.length + ' henkilön tiedot <br><br>' + date)
+        })
+        .catch(error => {
+            console.log(error)
         })
 })
 

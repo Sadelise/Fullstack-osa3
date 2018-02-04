@@ -10,4 +10,12 @@ const Person = mongoose.model('Person', {
     number: String
 })
 
+const formatPerson = (person) => {
+    return {
+        name: person.name,
+        number: person.number,
+        id: person._id
+    }
+}
+
 module.exports = Person
