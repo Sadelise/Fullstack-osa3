@@ -65,30 +65,29 @@ app.post('/api/persons', (req, res) => {
         .then(persons => {
             if (persons.find(person => person.name === body.name)) {
                 return res.status(400).json({ error: 'name must be unique' })
+            } else if (body.name === undefined) {
+                return res.status(400).json({ error: 'name missing' })
+            } else if (body.number === undefined) {
+                return res.status(400).json({ error: 'number missing' })
+            } else {
+                const person = new Person({
+                    name: body.name,
+                    number: body.number,
+                })
+
+                person
+                    .save()
+                    .then(newperson => {
+                        res.json(formatPerson(newperson))
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
             }
         })
         .catch(error => {
             console.log(error)
         })
-    if (body.name === undefined) {
-        return res.status(400).json({ error: 'name missing' })
-    } else if (body.number === undefined) {
-        return res.status(400).json({ error: 'number missing' })
-    } else {
-        const person = new Person({
-            name: body.name,
-            number: body.number,
-        })
-
-        person
-            .save()
-            .then(newperson => {
-                res.json(formatPerson(newperson))
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
 })
 
 app.get('/api/persons/:id', (req, res) => {
