@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-// korvaa url oman tietokantasi urlilla!
 const url = 'mongodb://auser:moresekred@ds119258.mlab.com:19258/agile-beach-puhelinluettelo'
 
 mongoose.connect(url)
