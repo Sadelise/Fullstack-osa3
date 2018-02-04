@@ -102,6 +102,17 @@ app.get('/api/persons/:id', (req, res) => {
         })
 })
 
+app.put('/api/persons/:id', (req, res) => {
+    Person
+        .findByIdAndUpdate({ _id: req.params.id }, { number: req.body.number })
+        .then(person => {
+            res.json(formatPerson(person))
+        })
+        .catch(error => {
+            console.log(error)
+        })
+})
+
 app.delete('/api/persons/:id', (req, res) => {
     Person
         .findByIdAndRemove(req.params.id)
