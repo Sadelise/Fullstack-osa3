@@ -2,7 +2,9 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 var morgan = require('morgan')
-morgan.token('content', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('content', function(req, res) {
+  return JSON.stringify(req.body)
+})
 const cors = require('cors')
 const Person = require('./models/person')
 
@@ -35,105 +37,115 @@ app.use(express.static('build'))
 // ]
 
 const formatPerson = (person) => {
-    return {
-        name: person.name,
-        number: person.number,
-        id: person._id
-    }
+  return {
+    name: person.name,
+    number: person.number,
+    id: person._id
+  }
 }
 
 app.get('/api/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+  res.send('<h1>Hello World!</h1>')
 })
 
 app.get('/api/persons', (req, res) => {
-    Person
-        .find({})
-        .then(persons => {
-            res.json(persons.map(formatPerson))
-        })
-        .catch(error => {
-            console.log(error)
-        })
+  Person
+    .find({})
+    .then(persons => {
+      res.json(persons.map(formatPerson))
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.post('/api/persons', (req, res) => {
-    const body = req.body
+  const body = req.body
 
-    Person
-        .find({})
-        .then(persons => {
-            if (persons.find(person => person.name === body.name)) {
-                return res.status(400).json({ error: 'name must be unique' })
-            } else if (body.name === undefined) {
-                return res.status(400).json({ error: 'name missing' })
-            } else if (body.number === undefined) {
-                return res.status(400).json({ error: 'number missing' })
-            } else {
-                const person = new Person({
-                    name: body.name,
-                    number: body.number,
-                })
-
-                person
-                    .save()
-                    .then(newperson => {
-                        res.json(formatPerson(newperson))
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            }
+  Person
+    .find({})
+    .then(persons => {
+      if (persons.find(person => person.name === body.name)) {
+        return res.status(400).json({
+          error: 'name must be unique'
         })
-        .catch(error => {
+      } else if (body.name === undefined) {
+        return res.status(400).json({
+          error: 'name missing'
+        })
+      } else if (body.number === undefined) {
+        return res.status(400).json({
+          error: 'number missing'
+        })
+      } else {
+        const person = new Person({
+          name: body.name,
+          number: body.number,
+        })
+
+        person
+          .save()
+          .then(newperson => {
+            res.json(formatPerson(newperson))
+          })
+          .catch(error => {
             console.log(error)
-        })
+          })
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    Person
-        .findById(req.params.id)
-        .then(person => {
-            res.json(formatPerson(person))
-        })
-        .catch(error => {
-            console.log(error)
-        })
+  Person
+    .findById(req.params.id)
+    .then(person => {
+      res.json(formatPerson(person))
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.put('/api/persons/:id', (req, res) => {
-    Person
-        .findByIdAndUpdate({ _id: req.params.id }, { number: req.body.number })
-        .then(person => {
-            res.json(formatPerson(person))
-        })
-        .catch(error => {
-            console.log(error)
-        })
+  Person
+    .findByIdAndUpdate({
+      _id: req.params.id
+    }, {
+      number: req.body.number
+    })
+    .then(person => {
+      res.json(formatPerson(person))
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    Person
-        .findByIdAndRemove(req.params.id)
-        .then(res.status(204).end())
-        .catch(error => {
-            console.log(error)
-        })
+  Person
+    .findByIdAndRemove(req.params.id)
+    .then(res.status(204).end())
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 app.get('/api/info', (req, res) => {
-    const date = new Date()
-    Person
-        .find({})
-        .then(persons => {
-            res.send('puhelinluettelossa ' + persons.length + ' henkilön tiedot <br><br>' + date)
-        })
-        .catch(error => {
-            console.log(error)
-        })
+  const date = new Date()
+  Person
+    .find({})
+    .then(persons => {
+      res.send('puhelinluettelossa ' + persons.length + ' henkilön tiedot <br><br>' + date)
+    })
+    .catch(error => {
+      console.log(error)
+    })
 })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
